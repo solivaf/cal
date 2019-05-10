@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"math"
+	"sort"
 )
 
 type Service struct {
@@ -45,6 +46,8 @@ func (s *Service) CalculateDistance(address, destination string) ([]float64, err
 			distances = append(distances, distance)
 		}
 	}
+
+	sort.Float64s(distances)
 
 	return distances, nil
 }

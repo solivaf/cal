@@ -6,13 +6,13 @@ import (
 )
 
 type ApiResponse struct {
-	Message      string       `json:"message"`
-	DistanceInfo DistanceInfo `json:"distance_info"`
+	Message      string        `json:"message,omitempty"`
+	DistanceInfo *DistanceInfo `json:"distance_info,omitempty"`
 }
 
 type DistanceInfo struct {
-	Distances []float64 `json:"distances"`
-	Closer    float64   `json:"closer"`
+	Distances []float64 `json:"distances,omitempty"`
+	Closer    float64   `json:"closer,omitempty"`
 }
 
 func (response ApiResponse) CreateMissingRequiredParameters() ([]byte, error) {

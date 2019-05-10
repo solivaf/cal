@@ -25,7 +25,7 @@ const (
 )
 
 func TestCalculateMissingAddressParameter(t *testing.T) {
-	client := google.CreateClient(3000, "foo")
+	client := google.CreateClient(3000, "foo", "")
 	service := distanceService.CreateService(client)
 	distanceHandler := handler.CreateHandler(service)
 
@@ -48,7 +48,7 @@ func TestCalculateMissingAddressParameter(t *testing.T) {
 }
 
 func TestCalculateMissingDestinationParameter(t *testing.T) {
-	client := google.CreateClient(3000, "foo")
+	client := google.CreateClient(3000, "foo", "")
 	service := distanceService.CreateService(client)
 	distanceHandler := handler.CreateHandler(service)
 
@@ -71,7 +71,7 @@ func TestCalculateMissingDestinationParameter(t *testing.T) {
 }
 
 func TestCalculateDistanceMissingParameters(t *testing.T) {
-	client := google.CreateClient(3000, "foo")
+	client := google.CreateClient(3000, "foo", "")
 	service := distanceService.CreateService(client)
 	distanceHandler := handler.CreateHandler(service)
 

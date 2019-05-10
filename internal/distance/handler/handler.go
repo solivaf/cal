@@ -30,13 +30,13 @@ func (h *Handler) CalculateDistance(responseWriter http.ResponseWriter, req *htt
 	address := _request.GetQueryParamFromRequest(params.Address, *req)
 	destination := _request.GetQueryParamFromRequest(params.Destination, *req)
 
-	_, err := h.DistanceService.CalculateDistance(address, destination)
+	distances, err := h.DistanceService.CalculateDistance(address, destination)
 	if err != nil {
 		responseWriter.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
-	resp := &response.ApiResponse{DistanceInfo: response.DistanceInfo{}}
+	resp := &response.ApiResponse{DistanceInfo: &response.DistanceInfo{Closer: distances[0], Distances: distances}}
 	responseBytes, err := json.Marshal(resp)
 	if err != nil {
 		log.Println(fmt.Sprintf("Erro ao realizar marshal - error %s", err.Error()))
@@ -44,6 +44,9 @@ func (h *Handler) CalculateDistance(responseWriter http.ResponseWriter, req *htt
 		return
 	}
 
+	log.Println(fmt.Sprintf("Calculo realizado com sucesso, corpo de resposta %s", string(responseBytes)))
+
+	responseWriter.Header().Add("Content-Type", "application/json")
 	responseWriter.WriteHeader(http.StatusOK)
 	responseWriter.Write(responseBytes)
 
