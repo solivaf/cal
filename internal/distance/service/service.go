@@ -1,4 +1,4 @@
-package distance
+package service
 
 import (
 	"calindra/internal/geocoding/client"
