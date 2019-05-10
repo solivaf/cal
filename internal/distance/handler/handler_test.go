@@ -11,6 +11,7 @@ import (
 	"calindra/internal/geocoding/client/google"
 	"calindra/internal/geocoding/client/mocks"
 	"encoding/json"
+	"errors"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
 	"net/http"
@@ -115,4 +116,27 @@ func TestCalculateDistance(t *testing.T) {
 	distanceHandler.CalculateDistance(recorder, request)
 
 	assert.Equal(t, http.StatusOK, recorder.Code)
+}
+
+func TestHandler_CalculateDistanceServiceError(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	geocodingClientMock := mock_client.NewMockGeoCodingClient(ctrl)
+
+	geocodingClientMock.EXPECT().FindAddress("Rua General Serveriano, 205, Botafogo, Rio de Janeiro, 22290040").
+		Return(nil, errors.New("connection i/o timeout"))
+
+	service := distanceService.CreateService(geocodingClientMock)
+	distanceHandler := handler.CreateHandler(service)
+
+	request := httptest.NewRequest(http.MethodGet, route.Distance, nil)
+	query := request.URL.Query()
+	query.Add(params.Address, "Rua General Serveriano, 205, Botafogo, Rio de Janeiro, 22290040")
+	query.Add(params.Destination, "Rua da Auvernia, 286, Taúa, Ilha do Governador, Rio de Janeiro, 21920170")
+	request.URL.RawQuery = query.Encode()
+
+	recorder := httptest.NewRecorder()
+
+	distanceHandler.CalculateDistance(recorder, request)
+
+	assert.Equal(t, http.StatusInternalServerError, recorder.Code)
 }

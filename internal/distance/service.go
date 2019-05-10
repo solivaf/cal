@@ -18,6 +18,11 @@ func CreateService(codingClient client.GeoCodingClient) *Service {
 func (s *Service) CalculateDistance(address, destination string) ([]float64, error) {
 	distances := make([]float64, 0)
 	addressResponse, err := s.GeoCodingClient.FindAddress(address)
+	if err != nil {
+		log.Println(fmt.Sprintf("Erro ao buscar dados do endereco %s", address))
+		return nil, err
+	}
+
 	destinationResponse, err := s.GeoCodingClient.FindAddress(destination)
 	if err != nil {
 		log.Println(fmt.Sprintf("Erro ao buscar dados do endereco %s", address))
