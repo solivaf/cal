@@ -1,23 +1,23 @@
-package distance
+package filter
 
 import (
-	_request "calindra/internal/api/request"
+	"calindra/internal/api/request"
 	"calindra/internal/api/response"
-	"log"
 	"net/http"
 )
 
-func CalculateDistance(responseWriter http.ResponseWriter, req *http.Request) {
-	log.Println("Recebendo request em /distance ")
-	if !_request.IsValid(req) {
+func ValidateRequest(responseWriter http.ResponseWriter, req *http.Request) bool {
+	if !request.IsValid(req) {
 		resp := &response.ApiResponse{}
 		bytesResponse, err := resp.CreateMissingRequiredParameters()
 		if err != nil {
 			responseWriter.WriteHeader(http.StatusInternalServerError)
-			return
+			return false
 		}
 		responseWriter.WriteHeader(http.StatusBadRequest)
 		responseWriter.Write(bytesResponse)
-		return
+		return false
 	}
+
+	return true
 }
