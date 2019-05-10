@@ -5,7 +5,7 @@ import (
 	"calindra/internal/api/request/filter"
 	"calindra/internal/api/request/params"
 	"calindra/internal/api/response"
-	"calindra/internal/distance"
+	"calindra/internal/distance/service"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -13,10 +13,10 @@ import (
 )
 
 type Handler struct {
-	DistanceService *distance.Service
+	DistanceService *service.Service
 }
 
-func CreateHandler(service *distance.Service) *Handler {
+func CreateHandler(service *service.Service) *Handler {
 	return &Handler{DistanceService: service}
 }
 
